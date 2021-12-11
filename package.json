@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Daria-Valitskaya/kapusta-back-end#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
     "bcryptjs": "^2.4.3",
     "commander": "8.3.0",
     "cors": "^2.8.5",
