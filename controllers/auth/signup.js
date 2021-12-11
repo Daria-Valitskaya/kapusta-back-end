@@ -1,48 +1,44 @@
-const { users: service } = require("../../services");
+const { Conflict } = require('http-errors');
+const gravatar = require('gravatar');
+const { nanoid } = require('nanoid');
+const { User } = require("../../models");
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const { nanoid } = require("nanoid");
-
 const signup = async (req, res, next) => {
-  const { email } = req.body;
+  const { name, email, password } = req.body;
 
-  const user = await service.getOne({ email });
+  const user = await User.findOne({ email });
   if (user) {
-    return res.status(409).json({
-      status: "error",
-      code: 409,
-      message: "Already registered",
-    });
+    throw new Conflict('Already registered');
   }
+  const avatarURL = gravatar.url(email);
   const verifyToken = nanoid();
-  const newUser = await service.add({ ...req.body, verifyToken });
-
-  res.json({
-    status: "success",
-    code: 201,
-    message: "Successfully registered. Please verify your email!!",
-    data: {
-      email,
-      verifyToken,
-    },
+  const newUser = new User({
+    name,
+    email,
+    avatarURL,
+    verifyToken
   });
+  newUser.setPassword(password);
+  await newUser.save();
 
   const { URL } = process.env;
 
   const sendToEmail = {
-    from: "rostyslavdubinin@gmail.com",
+    from: "retulanarine@gmail.com",
     to: newUser.email,
     subject: "Verify email",
     html: `<a href="${URL}/api/auth/verify/${verifyToken}" target="_blank">Please verify your email<a/>`,
   };
-
-  try {
-    await sgMail.send(sendToEmail);
-    console.log("Email sent");
-  } catch (error) {
-    console.log(error);
-  }
+  
+  sgMail.send(sendToEmail);
+  res.status(201).json({
+    status: 'success',
+    code: 201,
+    message: 'Email sent successful'
+  });
+  
 };
 
 module.exports = signup;

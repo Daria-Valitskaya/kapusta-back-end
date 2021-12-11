@@ -1,16 +1,13 @@
-const { users: service } = require("../../services");
-
+const { Conflict } = require('http-errors');
+const { User } = require("../../models");
 const verifyEmail = async (req, res, next) => {
   const { verifyToken } = req.params;
-  const user = await service.getOne({ verifyToken });
+  
+  const user = await User.findOne({ verifyToken });
   if (!user) {
-    return res.status(404).json({
-      status: "error",
-      code: 404,
-      message: "User not found by token during email verification",
-    });
+    throw new Conflict('User not found by token during email verification');
   }
-  await service.update(user._id, { verify: true, verifyToken: null });
+  await User.findByIdAndUpdate(user._id, { verify: true, verifyToken: null });
   res.json({
     status: "success",
     code: 200,

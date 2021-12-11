@@ -1,27 +1,24 @@
-const { users: service } = require("../../services");
+const { Unauthorized } = require('http-errors');
+const { User } = require("../../models");
 const jwt = require("jsonwebtoken");
 
-const { SECRET } = process.env;
+const { SECRET_KEY } = process.env;
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
+  const user = await User.findOne({ email })
+  
 
-  const user = await service.getOne({ email });
-
-  if (!user || !user.comparePassword(password)) {
-    return res.status(400).json({
-      status: "error",
-      code: 400,
-      message: "Wrong email or password / email is not verified",
-    });
+  if (!user || !user.verify || !user.comparePassword(password)) {
+    throw new Unauthorized('Wrong email or password or email not verify');
   }
 
   const payload = {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET);
-  await service.update(user._id, { token });
+  const token = jwt.sign(payload, SECRET_KEY);
+  await User.findByIdAndUpdate(user._id, { token });
   res.json({
     status: "Success",
     code: 200,

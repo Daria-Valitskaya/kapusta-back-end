@@ -6,6 +6,7 @@ const emailRegex =
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
 const userSchema = Schema({
+  
   password: {
     type: String,
     required: [true, "Password is required"],
@@ -16,6 +17,10 @@ const userSchema = Schema({
     required: [true, "Email is required"],
     match: emailRegex,
     unique: true,
+  },
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
   },
   token: {
     type: String,
@@ -34,6 +39,10 @@ const userSchema = Schema({
     type: Number,
     default: 0,
   },
+  avatarURL: {
+    type: String,
+    required: true,
+  },
 });
 
 userSchema.methods.setPassword = function (password) {
@@ -45,6 +54,7 @@ userSchema.methods.comparePassword = function (password) {
 };
 
 const joiSchema = Joi.object({
+  name: Joi.string(),
   password: Joi.string().min(6).required(),
   email: Joi.string().required().email({
     minDomainSegments: 2,
