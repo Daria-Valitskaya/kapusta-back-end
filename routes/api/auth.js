@@ -1,10 +1,8 @@
 const express = require("express");
 const { ctrlWrapper } = require("../../helpers");
-const { validation, authentificate } = require("../../middlewares");
+const { validation, authentificate, upload } = require("../../middlewares");
 
-const {
-  user: { joiSchema },
-} = require("../../models/schemas");
+const { joiSchema } = require("../../models/user");
 const { auth: ctrl } = require("../../controllers");
 
 const router = express.Router();
@@ -14,5 +12,10 @@ router.get("/verify/:verifyToken", ctrlWrapper(ctrl.verifyEmail));
 router.post("/login", validation(joiSchema), ctrlWrapper(ctrl.login));
 router.get("/current", authentificate, ctrlWrapper(ctrl.getCurrentUser));
 router.get("/logout", authentificate, ctrlWrapper(ctrl.logout));
-
+router.patch(
+  "/avatars",
+  upload.single("avatar"),
+  authentificate,
+  ctrlWrapper(ctrl.updateAvatar)
+);
 module.exports = router;
