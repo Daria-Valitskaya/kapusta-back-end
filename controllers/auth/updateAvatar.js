@@ -9,10 +9,8 @@ const avatarDir = path.join(__dirname, "../../public/avatars");
 const updateAvatar = async (req, res) => {
   const { id } = req.user;
   const { path: tempUpload, originalname } = req.file;
-
   try {
     const resultUpload = path.join(avatarDir, id, `${id}_${originalname}`);
-
     Jimp.read(tempUpload)
       .then((img) => {
         return img.resize(250, 250).quality(60).write(resultUpload);
@@ -24,7 +22,7 @@ const updateAvatar = async (req, res) => {
     await fs.rename(tempUpload, resultUpload);
     const avatarURL = path.join("/avatars", id, `${id}_${originalname}`);
 
-    const result = await User.findOneAndUpdate(
+    const result = await User.findByIdAndUpdate(
       id,
       { avatarURL },
       {
