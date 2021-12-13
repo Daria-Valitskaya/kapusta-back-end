@@ -4,7 +4,7 @@ const Joi = require("joi");
 const transactionSchema = Schema(
   {
     date: {
-      type: Date,
+      type: String,
       required: [true, "Set date"],
     },
     description: {
@@ -49,7 +49,7 @@ const transactionSchema = Schema(
 );
 
 const joiSchema = Joi.object({
-  date: Joi.date().required(),
+  date: Joi.string().required(),
   description: Joi.string().required(),
   category: Joi.string().required(),
   isIncome: Joi.boolean().required(),
