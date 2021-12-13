@@ -52,7 +52,8 @@ const joiSchema = Joi.object({
   date: Joi.string().required(),
   description: Joi.string().required(),
   category: Joi.string().required(),
-  isIncome: Joi.boolean().required(),
+  sum: Joi.Number().required(),
+  transactionType: Joi.string().required(),
 });
 
 const Transaction = model("transacton", transactionSchema);
