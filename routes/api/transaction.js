@@ -14,4 +14,11 @@ router.patch(
   ctrlWrapper(ctrl.Income)
 );
 
+router.patch(
+  "/expenses",
+  authentificate,
+  validation(Transaction),
+  ctrlWrapper(ctrl.expenses)
+);
+
 module.exports = router;
