@@ -1,0 +1,504 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.0",
+    "title": "REST API Kapusta",
+    "description": "Showing off swagger-ui-express"
+  },
+  "consumes": ["application/json", "text/plain", "multipart/form-data"],
+  "produces": ["application/json", "text/plain", "application/xml"],
+  "servers": [{ "url": "http://localhost:3001" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Transactions",
+      "description": "Transactions endpoints"
+    }
+  ],
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Email sent successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponseError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponseErr"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponseErrServer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User authentication",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email or password is wrong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User has not verified his email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginErrorVerifiedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/verify/{verifyToken}": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User email verify",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "verifyToken",
+            "required": true,
+            "type": "string",
+            "description": "Users's verify token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserVerifyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseUserVerify"
+                }
+              }
+            }
+          }
+        }
+    }
+},
+ "/api/auth/current": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User current. Check the token in the request header!",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+       "/api/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "204": {
+            "description": "success",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Fail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Alex"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "201"
+          },
+          "message": {
+            "type": "string",
+            "description": "Email sent successful"
+          }
+        }
+      },
+      "RegistrationResponseErr": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "409"
+          },
+          "message": {
+            "type": "string",
+            "description": "Already registered"
+          }
+        }
+      },
+        "RegistrationResponseError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Bad request (invalid request body)"
+          }
+        }
+      },
+      "RegistrationResponseErrServer": {
+           "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "500"
+          },
+          "message": {
+            "type": "string",
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "LoginRequest": {
+           "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "LoginResponse": {
+             "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          },
+           "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "User's token"
+              },
+              "email": {
+                    "type": "string",
+                    "description": "User's email",
+                    "format": "email"
+                  },
+                  "balance": {
+                      "type": "number",
+                      "description": "User's balance"
+                  },
+                  "id": {
+                      "type": "string",
+                     "description": "User's id"
+                  }
+            }
+          }
+        }
+      },
+      "LoginErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "401"
+          },
+          "message": {
+            "type": "string",
+            "description": "Email or password is wrong"
+          }
+        }
+      }, 
+       "LoginErrorVerifiedResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "409"
+          },
+          "message": {
+            "type": "string",
+            "description": "User has not verified his email"
+          }
+        }
+      },
+      "UserVerifyResponse": {
+           "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Verification success"
+          }
+        }
+      },
+      "ErrorResponseUserVerify": {
+           "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "404"
+          },
+          "message": {
+            "type": "string",
+            "description": "Need verify again"
+          }
+        }
+      },
+      "CurrentResponse": {
+          "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200"
+          },
+           "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "balance": {
+                  "type": "number",
+                  "description": "User's balance"
+              }
+        }
+      },
+      "CurrentErrorResponse": {
+           "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "500"
+          },
+          "message": {
+            "type": "string",
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "ErrorResponse500": {
+           "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "500"
+          },
+          "message": {
+            "type": "string",
+            "description": "Internal Server Error"
+          }
+        }
+      }
+
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
