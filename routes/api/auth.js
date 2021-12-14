@@ -4,6 +4,7 @@ const { validation, authentificate, upload } = require("../../middlewares");
 
 const { joiSchema } = require("../../models/user");
 const { auth: ctrl } = require("../../controllers");
+const { balance: ctrll } = require("../../controllers");
 
 const router = express.Router();
 
@@ -18,4 +19,6 @@ router.patch(
   authentificate,
   ctrlWrapper(ctrl.updateAvatar)
 );
+
+router.post("/balance", authentificate, ctrlWrapper(ctrll.putBalance));
 module.exports = router;

@@ -5,7 +5,6 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
-const balanceRouter = require("./routes/api/user");
 const transactionRouter = require("./routes/api/transaction");
 
 const app = express();
@@ -18,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 app.use("/api/auth", authRouter);
-app.use("/api/user", balanceRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/transaction", transactionRouter);
 
