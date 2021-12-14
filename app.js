@@ -6,6 +6,8 @@ require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
 const balanceRouter = require("./routes/api/user");
+const transactionRouter = require("./routes/api/transaction");
+
 const app = express();
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
@@ -18,6 +20,7 @@ app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 app.use("/api/user", balanceRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/transaction", transactionRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
