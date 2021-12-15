@@ -21,4 +21,6 @@ router.patch(
   ctrlWrapper(ctrl.expenses)
 );
 
+router.delete("/:id", authentificate, ctrlWrapper(ctrl.deleteTransaction));
+
 module.exports = router;
