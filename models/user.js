@@ -12,7 +12,6 @@ const userSchema = Schema({
   password: {
     type: String,
     required: [true, "Password is required"],
-    minlength: 6,
   },
   email: {
     type: String,
@@ -56,7 +55,7 @@ userSchema.methods.comparePassword = function (password) {
 
 const joiSchema = Joi.object({
   name: Joi.string(),
-  password: Joi.string().min(6).required(),
+  password: Joi.string().min(9).max(15).required(),
   email: Joi.string().required().email({
     minDomainSegments: 2,
   }),
