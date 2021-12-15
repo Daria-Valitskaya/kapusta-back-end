@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
+  
   const user = await User.findOne({ email });
 
   if (!user || !user.comparePassword(password)) {
@@ -26,6 +27,7 @@ const login = async (req, res, next) => {
     status: "Success",
     code: 200,
     data: {
+      name,
       token,
       email,
       balance: user.balance,
