@@ -14,7 +14,7 @@ const deleteTransaction = async (req, res, next) => {
   res.json({
     status: "success",
     code: 200,
-    message: "contact deleted",
+    message: "Transaction deleted",
   });
 };
 
