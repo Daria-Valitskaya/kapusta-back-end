@@ -61,9 +61,14 @@ const joiSchema = Joi.object({
   }),
 });
 
+const joiSchema2 = Joi.object({
+  balance: Joi.number().required(),
+});
+
 const User = model("user", userSchema);
 
 module.exports = {
   User,
   joiSchema,
+  joiSchema2,
 };

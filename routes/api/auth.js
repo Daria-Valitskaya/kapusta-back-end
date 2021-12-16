@@ -2,7 +2,7 @@ const express = require("express");
 const { ctrlWrapper } = require("../../helpers");
 const { validation, authentificate, upload } = require("../../middlewares");
 
-const { joiSchema } = require("../../models/user");
+const { joiSchema, joiSchema2 } = require("../../models/user");
 const { auth: ctrl } = require("../../controllers");
 const { balance: ctrll } = require("../../controllers");
 
@@ -21,5 +21,5 @@ router.patch(
   ctrlWrapper(ctrl.updateAvatar)
 );
 
-router.post("/balance", authentificate, ctrlWrapper(ctrll.putBalance));
+router.post("/balance", authentificate, validation(joiSchema2), ctrlWrapper(ctrll.putBalance));
 module.exports = router;
