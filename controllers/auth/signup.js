@@ -2,9 +2,8 @@ const { Conflict } = require("http-errors");
 const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
 const { User } = require("../../models");
-const sgMail = require("@sendgrid/mail");
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const { sendMail } = require("../../helpers");
 const fs = require("fs/promises");
 const path = require("path");
 const avatarDir = path.join(__dirname, "../../public/avatars");
@@ -39,7 +38,7 @@ const signup = async (req, res, next) => {
     html: `<a href="http://localhost:3001/api/auth/verify/${verifyToken}" target="_blank">Please verify your email<a/>`,
   };
 
-  sgMail.send(sendToEmail);
+  await sendMail(sendToEmail);
   const avatarFolder = path.join(avatarDir, String(newUser._id));
   await fs.mkdir(avatarFolder);
 
