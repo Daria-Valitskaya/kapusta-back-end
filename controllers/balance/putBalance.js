@@ -3,7 +3,7 @@ const { User } = require("../../models");
 const putBalance = async (req, res, next) => {
   const ownerId = req.user._id;
   const newBalance = req.body.balance;
- 
+
   const updateBalance = await User.findByIdAndUpdate(ownerId, {
     balance: newBalance,
     new: true,
