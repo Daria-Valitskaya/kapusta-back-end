@@ -128,7 +128,108 @@
           }
         }
       }
-    },
+    }, "/api/transaction/income": {
+      "patch": {
+        "tags": ["Transactions"],
+        "summary": "Add new transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Object with income`s transaction",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequestIncome"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+     "/api/transaction/expenses": {
+      "patch": {
+        "tags": ["Transactions"],
+        "summary": "Add new transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Object with income`s transaction",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
     "/api/auth/verify/{verifyToken}": {
       "get": {
         "tags": ["Auth"],
@@ -246,6 +347,146 @@
             "description": "User's password",
             "example": "qwerty123"
           }
+        }
+      },
+      "CreateTransactionRequestIncome": {
+        "type": "object",
+        "required": ["transactionType", "date", "category",  "sum"],
+        "properties": {
+          "transactionType": {
+            "type": "string",
+            "description": "Type of transaction",
+            "example": "income"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date of transaction",
+            "example": "02.05.2020"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of income",
+            "example": "ЗП"
+          },
+         
+          "sum": {
+            "type": "number",
+            "description": "Sum of transaction"
+          }
+        }
+      },
+      "CreateTransactionRequest": {
+        "type": "object",
+        "required": ["transactionType", "date", "category",  "sum"],
+        "properties": {
+          "transactionType": {
+            "type": "string",
+            "description": "Type of transaction",
+            "example": "expense"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date of transaction",
+            "example": "02.05.2020"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of income",
+            "example": "Продукты"
+          },
+         
+          "sum": {
+            "type": "number",
+            "description": "Sum of transaction"
+          }
+        }
+      },
+      "CreateTransactionError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "400",
+            "example": "400"
+          },
+          "message": {
+            "type": "string",
+            "description": "Missing required field",
+            "example": "Missing required field"
+          }
+        }
+      },
+      "CreateTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Created"
+          },
+          "code": {
+            "type": "string",
+            "description": "201"
+          },
+          "data": {
+            "type": "object",
+          "properties": {
+          "result": {
+            "type": "object",
+            "description": "Full transaction",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "Id of transaction"
+              },
+             
+              "date": {
+                "type": "string",
+                "format": "date",
+                "description": "Date of transaction",
+                "example": "02.05.2020"
+              },
+              "category": {
+                "type": "string",
+                "description": "Category of transaction"
+              },
+               "description": {
+                "type": "string",
+                "description": "Description of transaction"
+              },
+             
+              "sum": {
+                "type": "number",
+                "description": "Sum of transaction"
+              },
+              
+              "owner": {
+                "type": "string",
+                "description": "User's id"
+              },
+              "transactionType": {
+                "type": "string",
+                "description": "Category of transaction"
+
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date",
+                "description": "Date creation of transaction"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date",
+                "description": "Date updation of transaction"
+              }
+            }
+            }
+          }
+        }
         }
       },
       "RegistrationResponse": {
@@ -432,6 +673,22 @@
           "message": {
             "type": "string",
             "description": "Need verify again"
+          }
+        }
+      },  "BalanceErrorResponse": {
+           "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "404"
+          },
+          "message": {
+            "type": "string",
+            "description": "Not found user"
           }
         }
       },
