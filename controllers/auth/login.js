@@ -32,6 +32,7 @@ const login = async (req, res, next) => {
       email,
       balance: user.balance,
       id: user._id,
+      verify: user.verify,
     },
   });
 };
