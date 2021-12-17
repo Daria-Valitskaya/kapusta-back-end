@@ -29,4 +29,6 @@ router.get(
 
 router.delete("/:id", authentificate, ctrlWrapper(ctrl.deleteTransaction));
 
+router.get("/:type/:period", authentificate, ctrlWrapper(ctrl.getTransForPeriod));
+
 module.exports = router;
