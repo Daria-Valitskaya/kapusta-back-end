@@ -21,6 +21,12 @@ router.patch(
   ctrlWrapper(ctrl.expenses)
 );
 
+router.get(
+  "/summary/:date/:transType",
+  authentificate,
+  ctrlWrapper(ctrl.getSummary)
+);
+
 router.delete("/:id", authentificate, ctrlWrapper(ctrl.deleteTransaction));
 
 module.exports = router;
