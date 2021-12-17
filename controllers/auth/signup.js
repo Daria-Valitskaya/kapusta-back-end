@@ -1,4 +1,3 @@
-const { Conflict } = require("http-errors");
 const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
 const { User } = require("../../models");
@@ -13,7 +12,12 @@ const signup = async (req, res, next) => {
 
   const user = await User.findOne({ email });
   if (user) {
-    throw new Conflict("Already registered");
+    return res.status(409).json({
+      status: "conflict",
+      code: 409,
+      message: "Already registered",
+      verify: user.verify,
+    });
   }
 
   const avatarURL = gravatar.url(email, {
