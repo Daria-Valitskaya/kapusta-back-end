@@ -27,6 +27,12 @@ router.get(
   ctrlWrapper(ctrl.getSummary)
 );
 
+router.get(
+  "/summary/:type",
+  authentificate,
+  ctrlWrapper(ctrl.getSummaryByCategory)
+);
+
 router.delete("/:id", authentificate, ctrlWrapper(ctrl.deleteTransaction));
 
 router.get("/:type/:period", authentificate, ctrlWrapper(ctrl.getTransForPeriod));
