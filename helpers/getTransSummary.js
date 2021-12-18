@@ -1,13 +1,17 @@
 const  _ = require('lodash');
-const moment = require('moment');
 
 const getTransSummary = (data, trans, transType) => {
   if (trans.length <= 0) {
     return;
   };
 
-  const normalizedYear = Number(data.slice(6));
-  const normalizedMonth = Number(data.slice(3,6));
+  const monthToCheck = Number(data.slice(3, 6));
+  const normalizedMonth = monthToCheck === 1
+    ? 13
+    : monthToCheck;
+  const normalizedYear = monthToCheck === 1
+    ? Number(data.slice(6)) - 1
+    : Number(data.slice(6));
 
   const monthesUA = [
   { month: 1, monthName: 'Январь' },
@@ -64,6 +68,8 @@ const processedTrans =
         'sum': _.sumBy(objs, 'sum') }))
     .value();
 	
+  processedTrans.forEach(elem => elem.sum = elem.sum.toFixed(2));
+  processedTrans.reverse();
 	return processedTrans;
 }
 

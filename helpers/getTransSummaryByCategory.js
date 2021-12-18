@@ -1,5 +1,7 @@
 const  _ = require('lodash');
 
+const num = parseFloat(10).toFixed(2);
+
 const getTransSummaryByCategory = (trans, transType) => {
   if (trans.length <= 0) {
     return;
@@ -17,7 +19,7 @@ const getTransSummaryByCategory = (trans, transType) => {
 
         acc.push(newTrans);
       }
-
+      
       return acc;
     }, [])
 
@@ -35,6 +37,7 @@ const getTransSummaryByCategory = (trans, transType) => {
       }))
       .value();
 	
+  processedTrans.forEach(elem => elem.sum = elem.sum.toFixed(2));
   return processedTrans;
 };
 
