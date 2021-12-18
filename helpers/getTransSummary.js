@@ -7,13 +7,11 @@ const getTransSummary = (data, trans, transType) => {
 
   const monthToCheck = Number(data.slice(3, 6));
   const normalizedMonth = monthToCheck === 1
-    ? 12
+    ? 13
     : monthToCheck;
   const normalizedYear = monthToCheck === 1
     ? Number(data.slice(6)) - 1
     : Number(data.slice(6));
-  
-  console.log(normalizedMonth, normalizedYear);
 
   const monthesUA = [
   { month: 1, monthName: 'Январь' },
@@ -52,7 +50,7 @@ const getTransSummary = (data, trans, transType) => {
   };
 
   const transWithMonth = getTransWithMonth(trans);
-console.log(transWithMonth);
+
   for (let i = 0; i < transWithMonth.length; i++) {
     for (let j = 0; j < monthesUA.length; j++){
       transWithMonth[i].month =
@@ -71,6 +69,7 @@ const processedTrans =
     .value();
 	
   processedTrans.forEach(elem => elem.sum = elem.sum.toFixed(2));
+  processedTrans.reverse();
 	return processedTrans;
 }
 
