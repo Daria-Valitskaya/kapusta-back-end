@@ -1,13 +1,19 @@
 const  _ = require('lodash');
-const moment = require('moment');
 
 const getTransSummary = (data, trans, transType) => {
   if (trans.length <= 0) {
     return;
   };
 
-  const normalizedYear = Number(data.slice(6));
-  const normalizedMonth = Number(data.slice(3,6));
+  const monthToCheck = Number(data.slice(3, 6));
+  const normalizedMonth = monthToCheck === 1
+    ? 12
+    : monthToCheck;
+  const normalizedYear = monthToCheck === 1
+    ? Number(data.slice(6)) - 1
+    : Number(data.slice(6));
+  
+  console.log(normalizedMonth, normalizedYear);
 
   const monthesUA = [
   { month: 1, monthName: 'Январь' },
@@ -46,7 +52,7 @@ const getTransSummary = (data, trans, transType) => {
   };
 
   const transWithMonth = getTransWithMonth(trans);
-
+console.log(transWithMonth);
   for (let i = 0; i < transWithMonth.length; i++) {
     for (let j = 0; j < monthesUA.length; j++){
       transWithMonth[i].month =
@@ -64,6 +70,7 @@ const processedTrans =
         'sum': _.sumBy(objs, 'sum') }))
     .value();
 	
+  processedTrans.forEach(elem => elem.sum = elem.sum.toFixed(2));
 	return processedTrans;
 }
 
