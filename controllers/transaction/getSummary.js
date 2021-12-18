@@ -5,13 +5,14 @@ const { Transaction } = require("../../models");
 const { getTransSummary } = require('../../helpers/index');
 
 const getSummary = async (req, res, next) => {
-  const { transType, date } = req.params;
+  
+  const { type, date } = req.params;
   const { _id } = req.user;
-  const data = await Transaction.find({ ownerId: _id, transactionType: transType });
+  const data = await Transaction.find({ owner: _id, transactionType: type });
 
   const normalizedData = data.filter(elem => String(elem.owner) === String(_id));
 
-  const result = getTransSummary(date, normalizedData, transType);
+  const result = getTransSummary(date, normalizedData, type);
 
   if (result.length === 0) {
     throw new NotFound(`Not found`);

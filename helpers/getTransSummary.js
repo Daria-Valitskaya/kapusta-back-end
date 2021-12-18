@@ -6,22 +6,22 @@ const getTransSummary = (data, trans, transType) => {
     return;
   };
 
-  const normalizedYear = Number(moment(Number(data)).format('YYYY'));
-  const normalizedMonth = Number(moment(Number(data)).format('MM'));
-  
+  const normalizedYear = Number(data.slice(6));
+  const normalizedMonth = Number(data.slice(3,6));
+
   const monthesUA = [
-  { month: 1, monthName: 'Січень' },
-  { month: 2, monthName: 'Лютий' },
-  { month: 3, monthName: 'Березень' },
-  { month: 4, monthName: 'Квітень' },
-  { month: 5, monthName: 'Травень' },
-  { month: 6, monthName: 'Червень' },
-  { month: 7, monthName: 'Липень' },
-  { month: 8, monthName: 'Серпень' },
-  { month: 9, monthName: 'Вересень' },
-  { month: 10, monthName: 'Жовтень' },
-  { month: 11, monthName: 'Листопад' },
-  { month: 12, monthName: 'Грудень' }
+  { month: 1, monthName: 'Январь' },
+  { month: 2, monthName: 'Февраль' },
+  { month: 3, monthName: 'Март' },
+  { month: 4, monthName: 'Апрель' },
+  { month: 5, monthName: 'Май' },
+  { month: 6, monthName: 'Июнь' },
+  { month: 7, monthName: 'Июль' },
+  { month: 8, monthName: 'Август' },
+  { month: 9, monthName: 'Сентябрь' },
+  { month: 10, monthName: 'Октябрь' },
+  { month: 11, monthName: 'Ноябрь' },
+  { month: 12, monthName: 'Декабрь' }
 ];
 
   const getTransWithMonth = trans => {
@@ -29,11 +29,8 @@ const getTransSummary = (data, trans, transType) => {
     const processedTrans = trans.reduce((acc, element) => {
       const newTrans = {};
 
-      const splitedMonth = element._doc.date.split('.');
-      const month = Number(splitedMonth[1]);
-      
-      const splitedYear = element._doc.date.split('.');
-      const year = Number(splitedYear[2]);
+      const month = Number(element._doc.date.slice(3, 6));
+      const year = Number(element._doc.date.slice(6));
 
       if (year === normalizedYear && month < normalizedMonth && transType === element._doc.transactionType) {
       
