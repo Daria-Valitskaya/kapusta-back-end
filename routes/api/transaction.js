@@ -22,7 +22,7 @@ router.patch(
 );
 
 router.get(
-  "/summary/:date/:transType",
+  "/summary/:type/:date",
   authentificate,
   ctrlWrapper(ctrl.getSummary)
 );
