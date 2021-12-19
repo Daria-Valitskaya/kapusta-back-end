@@ -28,7 +28,7 @@ router.get(
 );
 
 router.get(
-  "/summary/:type",
+  "/categories/:type/:date",
   authentificate,
   ctrlWrapper(ctrl.getSummaryByCategory)
 );
