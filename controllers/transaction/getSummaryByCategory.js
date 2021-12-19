@@ -1,9 +1,9 @@
 const { NotFound } = require("http-errors");
 
 const { Transaction } = require("../../models");
-const { getTransSummary } = require('../../helpers/index');
+const { getTransSummaryByCategory } = require('../../helpers/index');
 
-const getSummary = async (req, res, next) => {
+const getSummaryByCategory = async (req, res, next) => {
   
   const { type, date } = req.params;
   const { _id } = req.user;
@@ -11,7 +11,7 @@ const getSummary = async (req, res, next) => {
 
   const userData = data.filter(elem => String(elem.owner) === String(_id));
 
-  const result = getTransSummary(date, userData, type);
+  const result = getTransSummaryByCategory( date, userData, type);
 
   if (result.length === 0) {
     throw new NotFound(`Not found`);
@@ -22,6 +22,6 @@ const getSummary = async (req, res, next) => {
     code: 204,
     data: result
   });
-}
+};
 
-module.exports = getSummary;
+module.exports = getSummaryByCategory;

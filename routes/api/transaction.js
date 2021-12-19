@@ -22,9 +22,15 @@ router.patch(
 );
 
 router.get(
-  "/summary/:date/:transType",
+  "/summary/:type/:date",
   authentificate,
   ctrlWrapper(ctrl.getSummary)
+);
+
+router.get(
+  "/categories/:type/:date",
+  authentificate,
+  ctrlWrapper(ctrl.getSummaryByCategory)
 );
 
 router.delete("/:id", authentificate, ctrlWrapper(ctrl.deleteTransaction));
