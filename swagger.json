@@ -248,17 +248,94 @@
             "required": true,
             "type": "string",
             "description": "Period of transactions",
-            "example": "05.2020"
+            "example": "01.2021"
           }
         ],
         "security": [{ "Bearer": [] }],
         "responses": {
-          "200": {
+          "204": {
             "description": "success",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetTransactionByPeriodResponse"
+                }
+              }
+            }
+          },
+           "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    
+  },
+   "/api/transaction/summary/{type}/{date}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions by one year without current month",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "type": "string",
+            "description": "type of transactions",
+            "example": "income"
+          },
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "type": "string",
+            "description": "Yaer of transactions",
+            "example": "01.12.2021"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTransactionByYearResponse"
+                }
+              }
+            }
+          }, "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceErrorResponse"
                 }
               }
             }
@@ -449,7 +526,7 @@
           "date": {
             "type": "string",
             "description": "Date of transaction",
-            "example": "02.05.2020"
+            "example": "10.10.2021"
           },
           "category": {
             "type": "string",
@@ -475,7 +552,7 @@
           "date": {
             "type": "string",
             "description": "Date of transaction",
-            "example": "02.05.2020"
+            "example": "10.10.2021"
           },
           "category": {
             "type": "string",
@@ -557,62 +634,82 @@
           }
         }
       },
+        "GetTransactionByYearResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success",
+            "example": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "204",
+            "example": "204"
+          },
+          "data": {
+         
+              "type":"object",
+              "properties": {
+                "month": {
+                  "type":"string",
+                "description": "Month"
+                },
+      
+
+              "sum": {
+                "type": "number",
+                "description": "Sum of transaction"
+              }
+            
+            }
+          }
+        }
+      },
       "GetTransactionByPeriodResponse": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "description": "Ok",
-            "example": "Ok"
+            "description": "success",
+            "example": "success"
           },
           "code": {
             "type": "string",
-            "description": "200",
-            "example": "200"
+            "description": "204",
+            "example": "204"
           },
-          "resultTransaction": {
-            "type": "object",
-            "description": "Transactions by period",
-            "properties": {
+          "data": {
+         
+              "type":"object",
+              "properties": {
               "_id": {
                 "type": "string",
                 "description": "Id of transaction"
-              },
-              "type": {
-                "type": "string",
-                "description": "Type of transaction",
-                "example": "income"
               },
               "date": {
                 "type": "string",
                 "format": "date",
                 "description": "Date of transaction",
-                "example": "02.05.2020"
+                "example": "10.10.2021"
+              },
+              "description": {
+                "type": "string",
+                "description": "Description of transaction"
               },
               "category": {
                 "type": "string",
                 "description": "Category of transaction"
               },
-              "subCategory": {
-                "type": "string",
-                "description": "Subcategory of transaction"
-              },
+
               "sum": {
                 "type": "number",
                 "description": "Sum of transaction"
               },
-              "day": {
-                "type": "string",
-                "description": "Day of transaction"
-              },
-              "month": {
-                "type": "string",
-                "description": "Month of transaction"
-              },
-              "year": {
-                "type": "string",
-                "description": "Year of transaction"
-              },
+               "transactionType":{
+               "type": "string",
+                "description": "Category of transaction"
+             },
               "owner": {
                 "type": "string",
                 "description": "User's id"
@@ -627,6 +724,7 @@
                 "format": "date",
                 "description": "Date updation of transaction"
               }
+            
             }
           }
         }
@@ -683,7 +781,7 @@
                 "type": "string",
                 "format": "date",
                 "description": "Date of transaction",
-                "example": "02.05.2020"
+                "example": "10.10.2021"
               },
               "category": {
                 "type": "string",
