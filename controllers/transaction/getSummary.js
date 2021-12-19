@@ -7,9 +7,7 @@ const getSummary = async (req, res, next) => {
   
   const { type, date } = req.params;
   const { _id } = req.user;
-  const data = await Transaction.find({ owner: _id, transactionType: type });
-
-  const userData = data.filter(elem => String(elem.owner) === String(_id));
+  const userData = await Transaction.find({ owner: _id, transactionType: type });
 
   const result = getTransSummary(date, userData, type);
 
