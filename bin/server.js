@@ -1,7 +1,6 @@
 const app = require("../app");
 const mongoose = require("mongoose");
-const { PORT = "kapusta-team-project-back.herokuapp.com/", DB_HOST } =
-  process.env;
+const { PORT = 3001, DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
