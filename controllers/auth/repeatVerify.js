@@ -1,6 +1,7 @@
 const { User } = require("../../models");
 const { BadRequest } = require("http-errors");
 const { sendMail } = require("../../helpers");
+// const { BAZE_URL } = process.env;
 
 const repeatVerify = async (req, res) => {
   const { email } = req.body;
@@ -17,7 +18,7 @@ const repeatVerify = async (req, res) => {
   const mail = {
     to: email,
     subject: "Re-verification",
-    html: `<a href="http://localhost:3001/api/auth/verify/${user.verifyToken}">Click here to confirm registration</a>`,
+    html: `<a href="{BAZE_URL}/api/auth/verify/${user.verifyToken}">Click here to confirm registration</a>`,
   };
   await sendMail(mail);
 
