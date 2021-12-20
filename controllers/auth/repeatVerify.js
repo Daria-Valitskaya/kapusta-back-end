@@ -18,7 +18,7 @@ const repeatVerify = async (req, res) => {
   const mail = {
     to: email,
     subject: "Re-verification",
-    html: `<a href="BAZE_URL/api/auth/verify/${user.verifyToken}">Click here to confirm registration</a>`,
+    html: `<a href="${BAZE_URL}/api/auth/verify/${user.verifyToken}">Click here to confirm registration</a>`,
   };
   await sendMail(mail);
 

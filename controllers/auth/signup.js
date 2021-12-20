@@ -40,7 +40,7 @@ const signup = async (req, res, next) => {
     from: "retulanarine@gmail.com",
     to: newUser.email,
     subject: "Verify email",
-    html: `<a href="BAZE_URL/api/auth/verify/${verifyToken}" target="_blank">Please verify your email<a/>`,
+    html: `<a href="${BAZE_URL}/api/auth/verify/${verifyToken}" target="_blank">Please verify your email<a/>`,
   };
 
   await sendMail(sendToEmail);
