@@ -7,7 +7,7 @@
   },
   "consumes": ["application/json", "text/plain", "multipart/form-data"],
   "produces": ["application/json", "text/plain", "application/xml"],
-  "servers": [{ "url": "http://localhost:3001" }],
+  "servers": [{ "url": "https://kapusta-team-project-back.herokuapp.com" }],
   "tags": [
     {
       "name": "Auth",
