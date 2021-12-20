@@ -7,7 +7,7 @@
   },
   "consumes": ["application/json", "text/plain", "multipart/form-data"],
   "produces": ["application/json", "text/plain", "application/xml"],
-  "servers": [{ "url": "http://localhost:3001" }],
+  "servers": [{ "url": "https://kapusta-team-project-back.herokuapp.com" }],
   "tags": [
     {
       "name": "Auth",
@@ -286,6 +286,62 @@
         }
       }
     
+  },   "/api/transaction/categories/{type}/{date}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions sum by one month",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "type": "string",
+            "description": "type of transactions",
+            "example": "income"
+          },
+          {
+            "in": "path",
+            "name": "date",
+            "required": true,
+            "type": "string",
+            "description": "Yaer of transactions",
+            "example": "01.12.2021"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTransactionByCategories"
+                }
+              }
+            }
+          }, "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    
   },
    "/api/transaction/summary/{type}/{date}": {
       "get": {
@@ -343,7 +399,46 @@
         }
       }
     
-  },
+  }, "/api/transaction/{id}": {
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Delete one transaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "The id of transaction",
+            "example": "615ca9a2e6502c38886cf887"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {},
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteTransactionErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/verify/{verifyToken}": {
       "get": {
         "tags": ["Auth"],
@@ -594,6 +689,44 @@
             "format": "email"
           }
         }
+      }, "DeleteTransactionResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success",
+            "example": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "200",
+            "example": "200"
+          },
+          "message": {
+            "type": "string",
+            "description": "Transaction deleted",
+            "example": "Transaction deleted"
+          }
+        }
+      }, "DeleteTransactionErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "error",
+            "example": "error"
+          },
+          "code": {
+            "type": "string",
+            "description": "404",
+            "example": "404"
+          },
+          "message": {
+            "type": "string",
+            "description": "Id of transaction not found",
+            "example": "Id of transaction not found"
+          }
+        }
       },
        "NotFoundErrorResponse": {
         "type": "object",
@@ -633,8 +766,39 @@
             "example": "Verification has already been passed"
           }
         }
+      },  "GetTransactionByYearResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success",
+            "example": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "204",
+            "example": "204"
+          },
+          "data": {
+         
+              "type":"object",
+              "properties": {
+                "month": {
+                  "type":"string",
+                "description": "Month"
+                },
+      
+
+              "sum": {
+                "type": "number",
+                "description": "Sum of transaction"
+              }
+            
+            }
+          }
+        }
       },
-        "GetTransactionByYearResponse": {
+        "GetTransactionByCategories": {
         "type": "object",
         "properties": {
           "status": {
