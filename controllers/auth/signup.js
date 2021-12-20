@@ -1,7 +1,7 @@
 const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
 const { User } = require("../../models");
-const { BAZE_URL } = process.env;
+const BAZE_URL = "https://kapusta-team-project-back.herokuapp.com";
 
 const { sendMail } = require("../../helpers");
 const fs = require("fs/promises");
@@ -40,7 +40,7 @@ const signup = async (req, res, next) => {
     from: "retulanarine@gmail.com",
     to: newUser.email,
     subject: "Verify email",
-    html: `<a href="{BAZE_URL}/api/auth/verify/${verifyToken}" target="_blank">Please verify your email<a/>`,
+    html: `<a href="BAZE_URL/api/auth/verify/${verifyToken}" target="_blank">Please verify your email<a/>`,
   };
 
   await sendMail(sendToEmail);
