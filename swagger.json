@@ -128,7 +128,50 @@
           }
         }
       }
-    }, "/api/transaction/income": {
+    }, 
+     
+    "/api/auth/balance": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Balance's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transaction/income": {
       "patch": {
         "tags": ["Transactions"],
         "summary": "Add new transaction",
@@ -912,6 +955,38 @@
                 "type": "string",
                 "description": "Verification email sent",
                 "example": "Verification email sent"
+              }
+            }
+          }
+        }
+      },"BalanceRequest": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "number",
+            "description": "User's balance",
+            "example": 0
+          }
+        }
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "201"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "balance": {
+                "type": "number",
+                "description": "User's balance",
+                "example": 50000
               }
             }
           }
