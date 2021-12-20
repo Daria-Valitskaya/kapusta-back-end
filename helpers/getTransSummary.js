@@ -51,25 +51,29 @@ const getTransSummary = (data, trans, transType) => {
 
   const transWithMonth = getTransWithMonth(trans);
 
-  for (let i = 0; i < transWithMonth.length; i++) {
-    for (let j = 0; j < monthesUA.length; j++){
-      transWithMonth[i].month =
-        Number(transWithMonth[i].month) === Number(monthesUA[j].month)
-          ? monthesUA[j].monthName
-          : transWithMonth[i].month;
-    }
-  };
-
-const processedTrans =
+  const processedTrans =
   _(transWithMonth)
     .groupBy('month')
     .map((objs, key) => ({
         'month': key,
         'sum': _.sumBy(objs, 'sum') }))
     .value();
+
+  for (let i = 0; i < processedTrans.length; i++) {
+    for (let j = 0; j < monthesUA.length; j++){
+      if (Number(processedTrans[i].month) === Number(monthesUA[j].month)) {
+          processedTrans[i]['monthName'] = monthesUA[j].monthName;
+      }
+    }
+  };
+
+  for (let i = 0; i < processedTrans.length; i++) {
+    processedTrans[i].month = processedTrans[i].month - 1;
+  }
+
+  processedTrans.sort((a, b) => b.month - a.month)
 	
   processedTrans.forEach(elem => elem.sum = elem.sum.toFixed(2));
-  processedTrans.reverse();
 	return processedTrans;
 }
 
