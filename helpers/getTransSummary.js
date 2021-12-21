@@ -5,13 +5,7 @@ const getTransSummary = (data, trans, transType) => {
     return;
   };
 
-  const monthToCheck = Number(data.slice(3, 6));
-  const normalizedMonth = monthToCheck === 1
-    ? 13
-    : monthToCheck;
-  const normalizedYear = monthToCheck === 1
-    ? Number(data.slice(6)) - 1
-    : Number(data.slice(6));
+  const normalizedYear = Number(data.slice(6));
 
   const monthesUA = [
   { month: 1, monthName: 'Январь' },
@@ -36,7 +30,7 @@ const getTransSummary = (data, trans, transType) => {
       const month = Number(element._doc.date.slice(3, 6));
       const year = Number(element._doc.date.slice(6));
 
-      if (year === normalizedYear && month < normalizedMonth && transType === element._doc.transactionType) {
+      if (year === normalizedYear && transType === element._doc.transactionType) {
       
       newTrans.month = month;
         newTrans.sum = element._doc.sum;
