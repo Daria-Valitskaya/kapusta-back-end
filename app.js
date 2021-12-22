@@ -19,6 +19,9 @@ app.use(express.static("public"));
 app.use("/api/auth", authRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/transaction", transactionRouter);
+app.use("/link", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../pablic/link.html"));
+});
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

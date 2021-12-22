@@ -5,6 +5,10 @@ const { validation, authentificate, upload } = require("../../middlewares");
 const { joiSchema, joiSchema2 } = require("../../models/user");
 const { auth: ctrl } = require("../../controllers");
 const { balance: ctrll } = require("../../controllers");
+const {
+  googleAuth,
+  googleRedirect,
+} = require("../../controllers/auth/googleAuth");
 
 const router = express.Router();
 
@@ -21,8 +25,8 @@ router.patch(
   ctrlWrapper(ctrl.updateAvatar)
 );
 
-router.get("/google", ctrlWrapper(ctrl.googleAuth));
-router.get("/google-redirect", ctrlWrapper(ctrl.googleRedirect));
+router.get("/google", ctrlWrapper(googleAuth));
+router.get("/google-redirect", ctrlWrapper(googleRedirect));
 
 router.post(
   "/balance",
