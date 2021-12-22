@@ -827,7 +827,7 @@
               "type":"object",
               "properties": {
                 "month": {
-                  "type":"string",
+                  "type":"number",
                 "description": "Month"
                 },
       
@@ -835,6 +835,10 @@
               "sum": {
                 "type": "number",
                 "description": "Sum of transaction"
+              },
+              "monthName": {
+                "type": "string",
+                "description": "MonthName"
               }
             
             }
@@ -1284,6 +1288,10 @@
               "balance": {
                   "type": "number",
                   "description": "User's balance"
+              }, 
+                "name": {
+                "type": "string",
+                 "description": "User's name"
               }
         }
       },
