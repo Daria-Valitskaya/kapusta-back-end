@@ -1,12 +1,16 @@
 const queryString = require("query-string");
 const axios = require("axios");
-// const URL = require("url");
+
+const BASE_URL = "https://kapusta-team-project-back.herokuapp.com";
+const FRONTEND_URL = "https://kapusta-team-project-front.netlify.app";
+const GOOGLE_CLIENT_ID =
+  "88887492623-i2flcc9sjf1a2nbti43i3l1udqvvverf.apps.googleusercontent.com";
+const GOOGLE_CLIENT_SECRET = "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";
 
 exports.googleAuth = async (req, res) => {
-  console.log("Google auth sent");
   const stringifiedParams = queryString.stringify({
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -15,12 +19,10 @@ exports.googleAuth = async (req, res) => {
     access_type: "offline",
     prompt: "consent",
   });
-  console.log(JSON.parse(stringifiedParams));
-  console.log("Google auth sent"); //
   return res.redirect(
     `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
   );
-}; //
+};
 
 exports.googleRedirect = async (req, res) => {
   const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
@@ -34,9 +36,9 @@ exports.googleRedirect = async (req, res) => {
     url: `https://oauth2.googleapis.com/token`,
     method: "post",
     data: {
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
+      client_id: GOOGLE_CLIENT_ID,
+      client_secret: GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${BASE_URL}/api/auth/google-redirect`,
       grant_type: "authorization_code",
       code,
     },
@@ -53,29 +55,5 @@ exports.googleRedirect = async (req, res) => {
   // ...
   // ...
   // ...
-  return res.redirect(
-    `${process.env.FRONTEND_URL}?email=${userData.data.email}`
-  );
+  return res.redirect(`${FRONTEND_URL}?email=${userData.data.email}`);
 };
-
-// const queryString = require("query-string");
-
-// const googleAuth = async (req, res) => {
-//   const stringifiedParams = queryString.stringify({
-//     client_id: process.env.GOOGLE_CLIENT_ID,
-//     redirect_uri: `${process.env.BASE_URL}/api/auth/google-redirect`,
-//     scope: [
-//       "https://www.googleapis.com/auth/userinfo.email",
-//       "https://www.googleapis.com/auth/userinfo.profile",
-//     ].join(" "),
-//     response_type: "code",
-//     access_type: "offline",
-//     prompt: "consent",
-//   });
-//   console.log("Google auth sent");
-//   return res.redirect(
-//     `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
-//   );
-// };
-
-// module.exports = googleAuth;
