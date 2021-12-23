@@ -4,10 +4,8 @@ const { Transaction } = require("../../models");
 const deleteTransaction = async (req, res, next) => {
   const { id } = req.params;
 
-  const result = await Transaction.findByIdAndDelete({
-    id,
-    owner: req.user._id,
-  });
+  const result = await Transaction.findByIdAndRemove(id);
+
   if (!result) {
     throw new NotFound("Not found");
   }
